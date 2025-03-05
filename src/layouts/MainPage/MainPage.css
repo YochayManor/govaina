@@ -1,0 +1,15 @@
+.inputs-form {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    gap: 10px;
+}
+
+.analyzation-result {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    text-align: start;
+}
