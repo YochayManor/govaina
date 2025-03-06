@@ -1,14 +1,14 @@
+import './config/env';
 import express, { Request, Response } from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import routes from './routes';
-
-dotenv.config({ path: process.env.NODE_ENV === 'production' ? '.env.production' : '.env.local' });
 
 const app = express();
 const PORT = 3001;
 
-app.use(cors());
+app.use(cors({
+    origin: process.env.GOVAINA_CLIENT_URL,
+}));
 app.use(express.json());
 
 app.get('/', (_req: Request, res: Response) => {

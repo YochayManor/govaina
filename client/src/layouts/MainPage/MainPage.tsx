@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { checkForExistingEvals } from '../../api/db/analyzations'
+import { checkForExistingEvals } from '../../api/db/evaluations'
 import { evaluate } from '../../api/openai/evaluations'
 import AnalyzationResponseSection from '../../components/AnalyzationResponseSection/AnalyzationResponseSection'
 
