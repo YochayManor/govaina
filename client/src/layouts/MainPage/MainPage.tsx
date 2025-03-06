@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { analyze } from '../../api/openai/assistant'
-import { checkForExistingAnalyzation } from '../../api/db/analyzations'
+import { checkForExistingEvals } from '../../api/db/analyzations'
+import { evaluate } from '../../api/openai/evaluations'
 import AnalyzationResponseSection from '../../components/AnalyzationResponseSection/AnalyzationResponseSection'
 
 import './MainPage.css'
@@ -18,9 +18,9 @@ function MainPage() {
     setDecisionText(event.target.value)
   }
 
-  const sendToAnalyze = async () => {
+  const sendToEvaluation = async () => {
     console.log('Analyzing...')
-    const [err1, existingResponseText] = await checkForExistingAnalyzation(decisionNumber)
+    const [err1, existingResponseText] = await checkForExistingEvals(decisionNumber)
 
     if (err1) {
       setError(err1.toString())
@@ -30,7 +30,7 @@ function MainPage() {
       return
     }
 
-    const [err2, responseText] = await analyze(decisionNumber, decisionText)
+    const [err2, responseText] = await evaluate(decisionNumber, decisionText)
     
     if (err2) {
       setError(err2.toString())
@@ -47,7 +47,7 @@ function MainPage() {
         <input className='decision-number-input' type='number' onChange={handleDecisionNumberChange} />
         <label>Decision text</label>
         <input className='decision-text-input' onChange={handleDecisionTextChange} />
-        <button className='analyze-button' onClick={sendToAnalyze}>Analyze</button>
+        <button className='analyze-button' onClick={sendToEvaluation}>Analyze</button>
       </div>
       {analyzationResult && <AnalyzationResponseSection text={analyzationResult} />}
       {error && <p>{error}</p>}
