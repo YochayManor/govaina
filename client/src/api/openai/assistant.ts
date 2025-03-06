@@ -1,24 +1,20 @@
 import { catchError } from "../common/errorHandler"
 
-const OPENAI_HOST = 'http://localhost:8000/analyze'
+const SERVER_API = 'http://localhost:3001/api'
 
 export const analyze = async (decisionNumber: number, decisionText: string): Promise<[Error] | [undefined, string]> => {
-  const [error, response] = await catchError(fetch(OPENAI_HOST, {
+  const [error, response] = await catchError(fetch(`${SERVER_API}/analyze`, {
     method: 'POST',
-    body: JSON.stringify({ decisionNumber, decisionText }),
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  }))
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ decisionNumber, decisionText })
+  }));
 
   if (error) {
     return [error] // TODO: handle error
   }
 
-  if (response.status === 200) {
-    return [undefined, await response.text()]
-  }
-  else {
-    return [new Error('Failed to analyze decision')]
-  }
+  const evaluationText = await response.text();
+  console.log(evaluationText);
+  
+  return [undefined, evaluationText]
 }
