@@ -1,40 +1,31 @@
 import { OpenAI } from 'openai';
+import { catchError } from './common';
 
 const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY
+    apiKey: process.env.OPENAI_API_KEY,
+    organization: "org-fgvdbOMEi46sit0opJ6AlWJi",
 });
 
-// Retrieves the Assistant
-export async function retrieveAssistant(assistantId: string) {
-    const assistant = await openai.beta.assistants.retrieve(assistantId);
-    return assistant;
-}
-
-// Create a Thread
-export async function createThread() {
-    const thread = await openai.beta.threads.create();
-    return thread;
-}
-
-// Add a message to a Thread
-export async function addMessageToThread(threadId: string, userMessageText: string) {
-    const message = await openai.beta.threads.messages.create(threadId, {
-        role: "user",
-        content: userMessageText
-    });
-    return message;
-}
-
-// Run the Assistant and Poll for Completion
-export async function runAssistant(threadId: string, assistantId: string): Promise<[Error] | [undefined, OpenAI.Beta.Threads.Messages.Message[]]> {
-    const run = await openai.beta.threads.runs.create(threadId, {
-        assistant_id: assistantId
-    });
-
-    if (run.status === "completed") {
-        const messages = await openai.beta.threads.messages.list(threadId);
-        return [undefined, messages.data]; // Return all messages (including assistant's response)
+// Create a thread and run it
+export async function performCompletion(
+    userMessageText: string, systemInstructions: string
+): Promise<[Error] | [undefined, string]> {
+    const [error, completionObj] = await catchError(openai.chat.completions.create({
+        model: "gpt-4o-mini-2024-07-18",
+        temperature: 1,
+        top_p: 1,
+        messages: [
+            { role: 'system', content: systemInstructions }, 
+            { role: "user", content: userMessageText }
+        ],
+    }));
+    
+    if (error) {
+        return [error];
     }
 
-    return [new Error(`Run failed with status: ${run.status}`)];
+    const evaluation = completionObj.choices[0].message.content
+    if (!evaluation) return [new Error('Empty evaluation')]
+    
+    return [undefined, evaluation]
 }

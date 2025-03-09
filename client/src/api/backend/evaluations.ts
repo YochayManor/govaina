@@ -1,6 +1,6 @@
 import { catchError } from "../common/errorHandler"
 
-const API_URL = `${import.meta.env.VITE_API_URL}/api`
+const API_URL = `/api`
 
 export const evaluate = async (decisionNumber: number, decisionText: string): Promise<[Error] | [undefined, string]> => {
   const [error, response] = await catchError(fetch(`${API_URL}/evaluations`, {
@@ -14,7 +14,6 @@ export const evaluate = async (decisionNumber: number, decisionText: string): Pr
   }
 
   const evaluationText = await response.text();
-  console.log(evaluationText);
   
   return [undefined, evaluationText]
 }

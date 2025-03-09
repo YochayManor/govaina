@@ -5,3 +5,7 @@
     justify-content: start;
     gap: 10px;
 }
+
+.decision-text-input {
+    width: 100%;
+}

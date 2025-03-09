@@ -1,24 +1,15 @@
-import { retrieveAssistant, createThread, addMessageToThread, runAssistant } from '../api/openai'
-
-const EVALUATIONS_ASSISTANT_ID = 'asst_7eZS5TSIGAp3v9C5EB4xA27z';
+import { performCompletion } from '../api/openai'
+import { ASSISTANT_INSTRUCTIONS } from './ASSISTANT_INSTRUCTIONS';
 
 export const evaluateDecision = async (decisionText: string): Promise<[Error] | [undefined, string]> => {
-    const assistant = await retrieveAssistant(EVALUATIONS_ASSISTANT_ID);
-    const thread = await createThread();
-    const userMessageText = `${decisionText}`;
-    await addMessageToThread(thread.id, userMessageText);
-    const [error, messages] = await runAssistant(thread.id, assistant.id);
+  const userMessageText = `${decisionText}`;
+  const [error, message] = await performCompletion(userMessageText, ASSISTANT_INSTRUCTIONS);
 
-    if (error) {
-        return [error];
-    }
+  if (error) {
+      return [error];
+  }
 
-    const assistantResponse = messages[messages.length - 1].content[0];
+  if (!message) return [new Error('Empty response')];
 
-    if (assistantResponse.type === 'text') {
-        const evaluation = assistantResponse.text.value
-        return [undefined, evaluation];
-    } else {
-        return [new Error('Unexpected assistant response type')];
-    }
+  return [undefined, message];
 }

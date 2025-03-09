@@ -1,9 +1,9 @@
-import { catchError } from "../common/errorHandler"
+import { catchError } from "./common"
 
 const DB_HOST = 'http://localhost:9000'
 
 export const checkForExistingEvals = async (decisionNumber: number): Promise<[Error] | [undefined, string | null]> => {
-    const [error, response] = await catchError(fetch(`${DB_HOST}/analyzations/${decisionNumber}`, {
+    const [error, response] = await catchError(fetch(`${DB_HOST}/evaluations/${decisionNumber}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -11,7 +11,7 @@ export const checkForExistingEvals = async (decisionNumber: number): Promise<[Er
     }))
 
     if (error) {
-        return [error] // TODO: handle error
+        return [error]
     }
 
     if (response.status === 200) {
