@@ -5,6 +5,7 @@ import routes from './routes';
 
 const app = express();
 const PORT = 3000;
+ViteExpress.config({ mode: (process.env as ImportMetaEnv).NODE_ENV });
 
 app.use(express.json());
 
