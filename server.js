@@ -6,7 +6,7 @@ import { ASSISTANT_INSTRUCTIONS } from './utils/ASSISTANT_INSTRUCTIONS.js'
 
 // Constants
 const isProduction = process.env.NODE_ENV === 'production'
-const port = process.env.PORT || 5173
+const port = process.env.PORT || 3000
 const base = process.env.BASE || '/'
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
