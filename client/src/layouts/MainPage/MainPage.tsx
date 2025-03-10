@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import Textarea from '@mui/joy/Textarea'
-import Input from '@mui/joy/Input'
+import { Input, Textarea } from '@mui/joy'
 
 import { evaluate } from '../../api/backend/evaluations'
 import EvaluationSection from '../../components/EvaluationSection/EvaluationSection'
