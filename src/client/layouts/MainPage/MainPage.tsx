@@ -3,7 +3,7 @@ import Textarea from '@mui/joy/Textarea'
 import Input from '@mui/joy/Input'
 
 import { evaluate } from '../../api/backend/evaluations'
-import EvaluationSection from '../../components/EvaluationSection/EvaluationSection'
+import EvaluationSection from '../../EvaluationSection/EvaluationSection'
 
 import './MainPage.css'
 
